@@ -59,11 +59,13 @@
                 radial-gradient(circle at 90% 80%, var(--neon-green) 0%, transparent 20%);
             background-size: cover;
             color: var(--text-color);
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: background-color 0.5s;
+ height: 100vh;
+    overflow: hidden; /* Dihapus atau diatur pada elemen container utama */
+    display: flex;
+    flex-direction: column;
+    transition: background-color 0.5s;
+    /* Tambahkan padding di bagian bawah body agar tidak tertutup footer */
+    padding-bottom: 60px; /* Sesuaikan dengan tinggi footer (sekitar 50px-60px) */
         }
 
         /* --- HEADER (TATA LETAK BARU) --- */
@@ -249,7 +251,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 -10px 30px rgba(0,0,0,0.5); /* Shadow lebih tebal */
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.5); 
     z-index: 200;
     transition: background-color 0.5s, box-shadow 0.5s;
 }
