@@ -4,7 +4,7 @@ body {
     margin: 0;
     padding: 0;
     /* --- BARIS UNTUK BACKGROUND GAMBAR --- */
-    background-image: url('gambar1.png'); /* Ganti dengan URL gambar Anda */
+    background-image: url('Gambar1.png'); /* Ganti dengan URL gambar Anda */
     background-size: cover; /* Memastikan gambar menutupi seluruh background */
     background-position: center; /* Memastikan gambar berpusat */
     background-repeat: no-repeat; /* Mencegah gambar berulang */
