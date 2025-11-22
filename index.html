@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pencatatan kerja Hadi Guna PKS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- TEMA WARNA DASAR (DARK MODE) --- */
+        :root {
+            --bg: #0f172a;
+            --panel-bg: #1e293b;
+            --header-bg-overlay: rgba(15, 23, 42, 0.8);
+            --text-color: #f8fafc;
+            --border-color: #334155;
+            --sticky-border-color: #475569;
+            --neon-green: #00ff9d;
+            --neon-blue: #00d2ff;
+            --neon-gold: #ffaa00;
+            --danger: #ff4757;
+            --input-bg: #0f172a;
+            --input-focus-bg: #ffffff;
+            --input-focus-text: #000000;
+            --total-highlight-bg: rgba(255, 170, 0, 0.1);
+            --check-orb-bg: #334155;
+            --check-orb-active-color: #0f172a;
+        }
+
+        /* --- TEMA WARNA TERANG (LIGHT MODE) --- */
+        .light-mode {
+            --bg: #f3f4f6;
+            --panel-bg: #ffffff;
+            --header-bg-overlay: rgba(255, 255, 255, 0.9);
+            --text-color: #1f2937;
+            --border-color: #e5e7eb;
+            --sticky-border-color: #d1d5db;
+            --neon-green: #10b981; /* Hijau Terang */
+            --neon-blue: #3b82f6; /* Biru Terang */
+            --neon-gold: #f59e0b; /* Emas Terang */
+            --danger: #ef4444;
+            --input-bg: #f9fafb;
+            --input-focus-bg: #ffffff;
+            --input-focus-text: #000000;
+            --total-highlight-bg: rgba(245, 158, 11, 0.1);
+            --check-orb-bg: #e5e7eb;
+            --check-orb-active-color: #ffffff;
+        }
+
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 10% 20%, var(--neon-blue) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, var(--neon-green) 0%, transparent 20%);
+            background-size: cover;
+            color: var(--text-color);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.5s;
+        }
+
+        /* --- HEADER (TATA LETAK BARU) --- */
+        header {
+            padding: 15px 30px;
+            background: var(--header-bg-overlay);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header .title-group {
+            display: flex;
+            align-items: center;
+        }
+        header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        header i { 
+            font-size: 2rem; 
+            margin-right:15px; 
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Tombol Mode */
+        #modeToggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.8rem;
+            color: var(--neon-blue);
+            transition: color 0.3s, transform 0.3s;
+        }
+        #modeToggle:hover {
+            transform: scale(1.1);
+            color: var(--neon-green);
+        }
+
+        /* --- TABLE WRAPPER --- */
+        .table-container {
+            flex: 1;
+            overflow: auto;
+            margin: 10px;
+            background: var(--panel-bg);
+            border-radius: 2px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            position: relative;
+            transition: background-color 0.5s, box-shadow 0.5s;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 1400px;
+        }
+
+        th, td {
+            padding: 12px 10px;
+            text-align: center;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+        }
+
+        /* --- HEADER STYLE --- */
+        th {
+            background: var(--bg);
+            color: var(--neon-blue);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 50px;
+            border-bottom: 2px solid var(--neon-blue);
+            transition: background-color 0.5s;
+        }
+        th i { color: var(--text-color); margin-right: 5px; transition: color 0.5s; }
+
+        /* --- STICKY COLUMNS (NO & NAMA) --- */
+        .sticky-col {
+            position: sticky;
+            z-index: 50;
+            background-color: var(--panel-bg);
+            border-right: 2px solid var(--sticky-border-color);
+            transition: background-color 0.5s;
+        }
+        
+        th.sticky-col {
+            background-color: var(--bg);
+            z-index: 105;
+            border-right: 2px solid var(--sticky-border-color);
+        }
+
+        th:nth-child(1), td:nth-child(1) { left: 0; width: 60px; }
+        th:nth-child(2), td:nth-child(2) { left: 60px; width: 220px; min-width: 220px; text-align: left; padding-left: 15px; }
+
+        /* --- INPUT NAMA --- */
+        input[type="text"] {
+            width: 90%;
+            padding: 10px 5px;
+            border-radius: 8px;
+            border: 1px solid var(--sticky-border-color);
+            background: var(--input-bg);
+            color: var(--text-color);
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus {
+            background: var(--input-focus-bg) !important;
+            color: var(--input-focus-text) !important;
+            border: 2px solid var(--neon-green) !important;
+            box-shadow: 0 0 15px var(--neon-green);
+            transform: scale(1.02);
+            outline: none;
+            font-weight: bold;
+        }
+
+        /* --- BUTTON CHECKBOX (NEON ORB) --- */
+        td.task-cell { cursor: pointer; }
+        .hidden-checkbox { display: none; }
+
+        .neon-check {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--check-orb-bg);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid var(--sticky-border-color);
+            color: transparent;
+        }
+
+        .task-cell:hover .neon-check {
+            border-color: var(--neon-green);
+            transform: scale(1.1);
+        }
+
+        .neon-check.active {
+            background: var(--neon-green);
+            border-color: var(--neon-green);
+            color: var(--check-orb-active-color); 
+            box-shadow: 0 0 15px var(--neon-green), 0 0 30px rgba(0, 255, 157, 0.4);
+            transform: scale(1.2);
+        }
+
+        .neon-check i { font-size: 14px; font-weight: bold; }
+
+        /* --- TOTAL COLUMN --- */
+        .row-total {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--neon-gold);
+            background: var(--total-highlight-bg);
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+/* --- FOOTER --- */
+.footer-bar {
+    /* ... (kode sebelumnya tetap) ... */
+    background: var(--bg);
+    padding: 10px 30px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.5); /* Shadow lebih tebal */
+    z-index: 200;
+    transition: background-color 0.5s, box-shadow 0.5s;
+}
+
+/* ... (Kode .grand-total-box tetap) ... */
+
+.actions { display: flex; gap: 25px; } /* Jarak antar tombol diperlebar */
+
+button {
+    padding: 14px 30px; /* Padding diperbesar */
+    border: none;
+    border-radius: 10px; /* Sudut lebih tegas */
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700; /* Lebih tebal */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease-in-out;
+    font-size: 1.0rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- DOWNLOAD EXCEL (HIJAU NEON) --- */
+.btn-download {
+    background: var(--neon-green);
+    color: var(--bg-dark); /* Teks gelap di latar terang */
+    box-shadow: 0 5px 20px rgba(0, 255, 157, 0.4); /* Neon Shadow Awal */
+}
+.btn-download:hover {
+    background: #00e68a;
+    box-shadow: 0 0 30px var(--neon-green), 0 0 50px rgba(0, 255, 157, 0.6); /* Glow lebih kuat */
+    transform: translateY(-2px) scale(1.03);
+}
+.btn-download i {
+    font-size: 1.2rem;
+    color: var(--bg-dark);
+}
+
+/* --- RESET DATA (MERAH DANGER) --- */
+.btn-reset {
+    background: var(--danger);
+    border: 2px solid var(--danger);
+    color: white;
+    box-shadow: 0 5px 20px rgba(255, 71, 87, 0.4); /* Danger Shadow Awal */
+}
+.btn-reset:hover {
+    background: #e73041;
+    color: white;
+    box-shadow: 0 0 30px var(--danger), 0 0 50px rgba(255, 71, 87, 0.6);
+    transform: translateY(-2px) scale(1.03);
+}
+.btn-reset i {
+    font-size: 1.2rem;
+    color: white;
+}
+
+/* Perbaikan untuk Light Mode agar warna tombol Reset tidak berubah aneh */
+.light-mode .btn-reset {
+    background: var(--danger);
+    color: white;
+    box-shadow: 0 5px 20px rgba(255, 71, 87, 0.4);
+}
+.light-mode .btn-download i, .light-mode .btn-download {
+    color: var(--bg); /* Memastikan teks dan ikon di Light Mode tetap kontras */
+}
+</style>
+</head>
+<body>
+
+    <header>
+        <div class="title-group">
+            <i class="fas fa-people-group"></i>
+            <h2>HADI GUNA PKS</h2>
+        </div>
+        
+        <button id="modeToggle" aria-label="Toggle Dark/Light Mode" onclick="toggleMode()">
+            <i class="fas fa-sun"></i>
+        </button>
+    </header>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th class="sticky-col">NO <br>001 / 50</th> 
+                    <th class="sticky-col"><i class="fas fa-user-astronaut"></i> Nama Anggota</th>
+                    <th><i class="fas fa-check-circle"></i> TUGAS 1</th>
+                    <th><i class="fas fa-check-circle"></i> TUGAS 2</th>
+                    <th><i class="fas fa-check-circle"></i> TUGAS 3</th>
+                    <th><i class="fas fa-check-circle"></i> TUGAS 4</th>
+                    <th><i class="fas fa-check-circle"></i> TUGAS 5</th>
+                    <th><i class="fas fa-check-circle"></i> TUGAS 6</th>
+                    <th><i class="fas fa-check-circle"></i> TUGAS 7</th>
+                    <th><i class="fas fa-check-circle"></i> TUGAS 8</th>
+                    <th><i class="fas fa-check-circle"></i> TUGAS 9</th>
+                    <th><i class="fas fa-check-circle"></i> TUGAS 10</th>
+                    <th><i class="fas fa-check-circle"></i> TUGAS 11</th>
+                    <th><i class="fas fa-check-circle"></i> TUGAS 12</th>
+                    <th><i class="fas fa-check-circle"></i> TUGAS 13</th>
+                    <th><i class="fas fa-check-circle"></i> SERVIS 14</th>
+                    <th style="color: var(--neon-gold); border-bottom-color: var(--neon-gold);">TOTAL KERJA</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                </tbody>
+        </table>
+    </div>
+
+    <div class="footer-bar">
+        <div class="grand-total-box">
+            <div>
+                <i class="fas fa-chart-bar" style="color:var(--neon-gold); font-size: 24px;"></i>
+            </div>
+            <div>
+                <span>TOTAL CENTANG</span><br>
+                <div class="grand-total-number" id="grandTotal">0</div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn-download" onclick="downloadCSV()">
+                <i class="fas fa-file-export"></i> Download Excel
+            </button>
+            <button class="btn-reset" onclick="resetData()">
+                <i class="fas fa-trash"></i> Reset Data
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const totalMembers = 50; // Disesuaikan dengan asumsi 001/50
+        const totalTasks = 14;
+        const tableBody = document.getElementById('tableBody');
+        const grandTotalEl = document.getElementById('grandTotal');
+        const root = document.documentElement; // Untuk CSS variables
+
+        // --- FUNGSI MODE TERANG/GELAP ---
+        function setMode(mode) {
+            if (mode === 'dark') {
+                root.classList.remove('light-mode');
+                localStorage.setItem('displayMode', 'dark');
+                document.getElementById('modeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                root.classList.add('light-mode');
+                localStorage.setItem('displayMode', 'light');
+                document.getElementById('modeToggle').innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        }
+
+        function toggleMode() {
+            const currentMode = root.classList.contains('light-mode') ? 'light' : 'dark';
+            setMode(currentMode === 'dark' ? 'light' : 'dark');
+        }
+
+        function checkAutoMode() {
+            const now = new Date();
+            const hour = now.getHours(); // Jam saat ini (0-23)
+            
+            // Mode Gelap otomatis aktif dari jam 18 (6 sore) sampai 5:59 pagi
+            // Jika jam 18, 19, ..., 23, 0, 1, ..., 5 -> Dark
+            if (hour >= 18 || hour < 6) {
+                setMode('dark');
+            } else {
+                // Selebihnya (jam 6 pagi sampai 5 sore) -> Light
+                setMode('light');
+            }
+
+            // Tapi, jika user pernah klik tombol (ada di localStorage), kita ikuti pilihan user
+            const savedMode = localStorage.getItem('displayMode');
+            if (savedMode) {
+                setMode(savedMode);
+            }
+        }
+        
+        // --- FUNGSI UTAMA DATA & TAMPILAN ---
+        function renderTable() {
+            let savedData = JSON.parse(localStorage.getItem('cyberTrackerData')) || {};
+            
+            for (let i = 1; i <= totalMembers; i++) {
+                let row = document.createElement('tr');
+                
+                // Kolom NO (Sticky)
+                row.innerHTML += `<td class="sticky-col" style="color: #64748b; font-weight: bold;">${i}</td>`;
+                
+                // Kolom NAMA (Sticky & Input)
+                let savedName = savedData[`name_${i}`] || `Isi Nama Anggota ${i}`;
+                row.innerHTML += `<td class="sticky-col">
+                    <input type="text" id="nameInput_${i}" value="${savedName}" oninput="saveName(${i}, this.value)" placeholder="Input Nama...">
+                </td>`;
+                
+                // Kolom TUGAS (Glowing Orbs)
+                let rowSum = 0;
+                for (let t = 1; t <= totalTasks; t++) {
+                    let isChecked = savedData[`check_${i}_${t}`] ? true : false;
+                    let activeClass = isChecked ? 'active' : '';
+                    if(isChecked) rowSum++;
+                    
+                    row.innerHTML += `<td class="task-cell" onclick="toggleCheck(${i}, ${t})">
+                        <input type="checkbox" id="check_${i}_${t}" class="hidden-checkbox" ${isChecked ? 'checked' : ''}>
+                        <div class="neon-check ${activeClass}" id="orb_${i}_${t}">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </td>`;
+                }
+
+                // Kolom TOTAL
+                row.innerHTML += `<td class="row-total" id="rowTotal_${i}">${rowSum}</td>`;
+                
+                tableBody.appendChild(row);
+            }
+            calculateGrandTotal();
+        }
+
+        function toggleCheck(memberId, taskId) {
+            let checkbox = document.getElementById(`check_${memberId}_${taskId}`);
+            let orb = document.getElementById(`orb_${memberId}_${taskId}`);
+            
+            checkbox.checked = !checkbox.checked;
+            
+            if(checkbox.checked) {
+                orb.classList.add('active');
+            } else {
+                orb.classList.remove('active');
+            }
+
+            let data = JSON.parse(localStorage.getItem('cyberTrackerData')) || {};
+            data[`check_${memberId}_${taskId}`] = checkbox.checked;
+            localStorage.setItem('cyberTrackerData', JSON.stringify(data));
+
+            updateRowTotal(memberId);
+        }
+
+        function updateRowTotal(memberId) {
+            let rowTotal = 0;
+            for(let t=1; t<=totalTasks; t++){
+                if(document.getElementById(`check_${memberId}_${t}`).checked) rowTotal++;
+            }
+            let totalCell = document.getElementById(`rowTotal_${memberId}`);
+            totalCell.innerText = rowTotal;
+            
+            if(rowTotal === totalTasks) {
+                totalCell.style.color = root.classList.contains('light-mode') ? "white" : "#fff";
+                totalCell.style.background = `var(--neon-green)`;
+            } else {
+                totalCell.style.color = "var(--neon-gold)";
+                totalCell.style.background = "var(--total-highlight-bg)";
+            }
+
+            calculateGrandTotal();
+        }
+
+        function saveName(memberId, value) {
+            let data = JSON.parse(localStorage.getItem('cyberTrackerData')) || {};
+            data[`name_${memberId}`] = value;
+            localStorage.setItem('cyberTrackerData', JSON.stringify(data));
+        }
+
+        function calculateGrandTotal() {
+            let total = 0;
+            for(let i=1; i<=totalMembers; i++) {
+                // Cek apakah elemen ada sebelum mencoba membaca innerText
+                const totalElement = document.getElementById(`rowTotal_${i}`);
+                if (totalElement) {
+                    total += parseInt(totalElement.innerText);
+                }
+            }
+            grandTotalEl.innerText = total;
+        }
+
+        function resetData() {
+            if(confirm("PERINGATAN: Reset akan menghapus semua data secara permanen!")) {
+                localStorage.removeItem('cyberTrackerData');
+                // Hapus juga mode yang tersimpan, kembali ke otomatis
+                localStorage.removeItem('displayMode'); 
+                location.reload();
+            }
+        }
+
+  // --- FUNGSI 1: PENYIMPANAN NAMA ANGGOTA FLEKSIBEL (Diperbarui) ---
+    function saveName(memberId, value) {
+        let data = JSON.parse(localStorage.getItem('cyberTrackerData')) || {};
+        
+        // Cek jika input dikosongkan atau hanya berisi spasi
+        if (value.trim() === "") {
+            // Hapus nama dari penyimpanan, sehingga bisa diisi ulang
+            delete data[`name_${memberId}`]; 
+        } else {
+            // Simpan nama baru
+            data[`name_${memberId}`] = value;
+        }
+
+        localStorage.setItem('cyberTrackerData', JSON.stringify(data));
+    }
+
+    function renderTable() {
+        let savedData = JSON.parse(localStorage.getItem('cyberTrackerData')) || {};
+        
+        for (let i = 1; i <= totalMembers; i++) {
+            let row = document.createElement('tr');
+            
+            row.innerHTML += `<td class="sticky-col" style="color: #64748b; font-weight: bold;">${i}</td>`;
+            
+            // Mengambil nama yang tersimpan. Jika tidak ada, gunakan string kosong agar placeholder muncul, bukan "Isi Nama Anggota X"
+            let savedName = savedData[`name_${i}`] || "";
+            let placeholderText = `Isi Nama Anggota ${i}`;
+
+            row.innerHTML += `<td class="sticky-col">
+                <input type="text" id="nameInput_${i}" value="${savedName}" oninput="saveName(${i}, this.value)" placeholder="${placeholderText}">
+            </td>`;
+            
+            let rowSum = 0;
+            for (let t = 1; t <= totalTasks; t++) {
+                let isChecked = savedData[`check_${i}_${t}`] ? true : false;
+                let activeClass = isChecked ? 'active' : '';
+                if(isChecked) rowSum++;
+                
+                row.innerHTML += `<td class="task-cell" onclick="toggleCheck(${i}, ${t})">
+                    <input type="checkbox" id="check_${i}_${t}" class="hidden-checkbox" ${isChecked ? 'checked' : ''}>
+                    <div class="neon-check ${activeClass}" id="orb_${i}_${t}">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </td>`;
+            }
+
+            row.innerHTML += `<td class="row-total" id="rowTotal_${i}">${rowSum}</td>`;
+            
+            tableBody.appendChild(row);
+        }
+        calculateGrandTotal();
+    }
+
+    function toggleCheck(memberId, taskId) {
+        let checkbox = document.getElementById(`check_${memberId}_${taskId}`);
+        let orb = document.getElementById(`orb_${memberId}_${taskId}`);
+        
+        checkbox.checked = !checkbox.checked;
+        
+        if(checkbox.checked) {
+            orb.classList.add('active');
+        } else {
+            orb.classList.remove('active');
+        }
+
+        let data = JSON.parse(localStorage.getItem('cyberTrackerData')) || {};
+        data[`check_${memberId}_${taskId}`] = checkbox.checked;
+        localStorage.setItem('cyberTrackerData', JSON.stringify(data));
+
+        updateRowTotal(memberId);
+    }
+
+    function updateRowTotal(memberId) {
+        let rowTotal = 0;
+        for(let t=1; t<=totalTasks; t++){
+            if(document.getElementById(`check_${memberId}_${t}`).checked) rowTotal++;
+        }
+        let totalCell = document.getElementById(`rowTotal_${memberId}`);
+        totalCell.innerText = rowTotal;
+        
+        if(rowTotal === totalTasks) {
+            totalCell.style.color = root.classList.contains('light-mode') ? "white" : "#fff";
+            totalCell.style.background = `var(--neon-green)`;
+        } else {
+            totalCell.style.color = "var(--neon-gold)";
+            totalCell.style.background = "var(--total-highlight-bg)";
+        }
+
+        calculateGrandTotal();
+    }
+
+    function calculateGrandTotal() {
+        let total = 0;
+        for(let i=1; i<=totalMembers; i++) {
+            const totalElement = document.getElementById(`rowTotal_${i}`);
+            if (totalElement) {
+                total += parseInt(totalElement.innerText);
+            }
+        }
+        grandTotalEl.innerText = total;
+    }
+
+    function resetData() {
+        if(confirm("PERINGATAN: Reset akan menghapus semua data secara permanen!")) {
+            localStorage.removeItem('cyberTrackerData');
+            localStorage.removeItem('displayMode'); 
+            location.reload();
+        }
+    }
+
+    // --- FUNGSI 2: DOWNLOAD TSV YANG RAPI (Diperbarui) ---
+    function downloadCSV() {
+        // Gunakan TAB (\t) sebagai pemisah
+        const delimiter = "\t";
+        // PENTING: Ubah tipe MIME ke 'text/tsv' agar Excel/Sheets menganggapnya sebagai Tab Separated Values
+        let csvContent = "data:text/tsv;charset=utf-8,";
+        
+        // Baris 1: Informasi Waktu Unduhan
+        const date = new Date();
+        const formattedDate = date.toLocaleDateString('id-ID', { 
+            year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' 
+        });
+        csvContent += `Data Exported by Hadi Guna PKS Tracker${delimiter}${formattedDate}\n\n`;
+
+        // Baris 3: Header Kolom
+        let headerRow = [
+            "NO", 
+            "NAMA ANGGOTA", 
+            "TUGAS 1", "TUGAS 2", "TUGAS 3", "TUGAS 4", "TUGAS 5", 
+            "TUGAS 6", "TUGAS 7", "TUGAS 8", "TUGAS 9", "TUGAS 10", 
+            "TUGAS 11", "TUGAS 12", "TUGAS 13", "SERVIS 14", // Kita biarkan SERVIS 14 sesuai permintaan di HTML
+            "TOTAL TUGAS SELESAI"
+        ];
+        csvContent += headerRow.join(delimiter) + "\n";
+
+        // --- Isi Data ---
+        for (let i = 1; i <= totalMembers; i++) {
+            let row = [];
+            row.push(i);
+            
+            // Ambil Nama Anggota (Hapus karakter TAB, Enter, atau koma yang bisa merusak format)
+            let nameVal = document.getElementById(`nameInput_${i}`).value.replace(/[\t\n\r,]/g, " ");
+            row.push(nameVal);
+
+            let rowTotal = 0;
+            for(let t=1; t<=totalTasks; t++){
+                let isChecked = document.getElementById(`check_${i}_${t}`).checked;
+                // Gunakan V/X yang jelas
+                row.push(isChecked ? "V" : "X"); 
+                if(isChecked) rowTotal++;
+            }
+            row.push(rowTotal);
+            
+            csvContent += row.join(delimiter) + "\n";
+        }
+
+        // --- Proses Unduh ---
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        // PENTING: Ganti ekstensi file ke .tsv agar Excel/Sheets memformat dengan benar.
+        link.setAttribute("download", `Pencatatan_Hadi_Guna_PKS_${date.toLocaleDateString('en-CA')}.tsv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+        // Panggil fungsi mode sebelum render tabel
+        checkAutoMode();
+        renderTable();
+    </script>
+</body>
+</html>
